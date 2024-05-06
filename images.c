@@ -72,14 +72,14 @@ int main(){
 			printf("Enter your choice \n");
 			scanf(" %c", &choice);
 			if(choice == 'y'){
-			printf("What is the name of the file you would like to save the image to?\n");
+			printf("What is the name of the file you would like to save the image to? (with a .txt ending)\n");
 			scanf("%s", filename);
 			fpedit = fopen(filename, "w");
 			if(fpedit == NULL){
 				printf("Could not save to file");
 				}
+			saveimage(rows,columns, image, fpedit);
 			printf("successfully grabbed image!\n");
-			void saveimage(int rows, int columns, int image[][columns], FILE* fpe);
 			}
 			if(choice == 'n'){
 			printf("okay\n");
