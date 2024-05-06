@@ -39,14 +39,14 @@ int main(){
 				printf("Could not open file to read");
 				break;
 			}
-			printf("sescfully loaded file\n");
 			actualSize(&rows, &columns, image, fpIn);
 			loadIn(rows, columns, image, fpIn);
+			printf("sescfully loaded file\n");
 			break;
 		case 2:
 			fpOut = fopen(TEST_OUT,"w");
 			if(fpOut == NULL){
-				printf("Could not open file to read");
+				printf("Could not open file to read\n");
 				break;
 			}
 			renderOut(rows, columns, image, stdout);
@@ -87,16 +87,22 @@ void renderOut(int rows, int columns, int image[][columns], FILE* fp){
 	}
 }
 void actualSize(int* rows, int* columns, int image[][MAX_2D_COLUMNS], FILE* fp){
-	int k;
-	
+	char temp[MAX_2D_ROWS][MAX_2D_COLUMNS];
+	int allarray = 0;
+	*rows = 0;
+	*columns = 0;
+	*rows++;
 	for(int i = 0; i < MAX_2D_ROWS; i++){
-		while(fscanf(fp, "%d" , &k) == 1){
-			*rows++;
-		}
 		for(int j = 0; j < MAX_2D_COLUMNS; j++){
-			while(fscanf(fp, "%d" , &k) == 1){
-				*columns++;
+			if(fscanf(fp, "%c" , &temp[i][j]) == 1){
+				if(temp[i][j] == '\n'){
+					*rows++;
+				}
+				else if((temp[i][j] == '0')||(temp[i][j] == '1')||(temp[i][j] == '2')||(temp[i][j] == '3')||(temp[i][j] == '4')){
+					allarray++;
+				}
 			}
 		}
 	}
+	*columns = (allarray / *rows);
 }
