@@ -14,8 +14,8 @@
 
 void loadIn(int rows, int columns, int image[][columns], FILE* fp);//Glen
 void renderOut(int rows, int columns, int image[][columns], FILE* fp);//Glen
-void brightAndDim();//Jaidunn
-void Crop(int* rows, int* columns, int image[][MAX_2D_COLUMNS]);//Jaidunn
+void brightAndDim(int rows, int columns, int image[][columns]);//Jaidunn
+void Crop(int rows, int columns, int image[][columns]);//Jaidunn
 int editMenu();//Jaidunn
 void actualSize(int* rows, int* columns, int image[][MAX_2D_COLUMNS], FILE* fp);//Glen
 void rotate90Deg();//Jaidunn and Glen
@@ -43,10 +43,10 @@ int main(){
 				printf("Could not open file to read");
 				break;
 			}
-			printf("successfully loaded file\n");
+			
 			actualSize(&rows, &columns, image, fpIn);
 			loadIn(rows, columns, image, fpIn);
-			printf("sescfully loaded file\n");
+			printf("successfully loaded file\n");
 			break;
 		case 2:
 			fpOut = fopen(TEST_OUT,"w");
@@ -62,7 +62,7 @@ int main(){
 				printf("Does nothing right now");
 			break;
 			case 2:
-				brightAndDim();
+				brightAndDim(rows, columns, image);
 			break;
 			case 3:
 				printf("Does nothing right now");
@@ -84,7 +84,7 @@ int main(){
 			if(choice == n){
 			printf("okay");
 			}
-			else if{
+			else{
 			printf("Input invalid");
 			}
 			break;
@@ -116,7 +116,7 @@ void renderOut(int rows, int columns, int image[][columns], FILE* fp){
 	imageConvert[4] = '0';
 	for(int i = 0; i < rows; i++){
 		for(int j = 0; j < columns; j++){
-			fprintf(fp, "%d" , imageConvert[image[i][j]]);
+			fprintf(fp, "%c" , imageConvert[image[i][j]]);
 		}
 	}
 }
@@ -128,18 +128,19 @@ void actualSize(int* rows, int* columns, int image[][MAX_2D_COLUMNS], FILE* fp){
 	*rows++;
 	for(int i = 0; i < MAX_2D_ROWS; i++){
 		for(int j = 0; j < MAX_2D_COLUMNS; j++){
+			*columns = 0;
 			if(fscanf(fp, "%c" , &temp[i][j]) == 1){
 				if(temp[i][j] == '\n'){
 					*rows++;
 				}
 				else if((temp[i][j] == '0')||(temp[i][j] == '1')||(temp[i][j] == '2')||(temp[i][j] == '3')||(temp[i][j] == '4')){
-					allarray++;
+					*columns++;
 				}
 			}
 		}
 	}
-	*columns = (allarray / *rows);
 }
+	
 int editMenu(){
 	int options;
 	printf("1.Crop image\n");
@@ -150,9 +151,15 @@ int editMenu(){
 	
 	return options;
 }
-void brightAndDim(){
+void brightAndDim(int rows, int columns, int image[][columns]){
 	char imageConvert[SIZE];
-	int input, rows, columns;
+	imageConvert[0] = ' ';
+	imageConvert[1] = '.';
+	imageConvert[2] = 'o';
+	imageConvert[3] = 'O';
+	imageConvert[4] = '0';
+	
+	int input;
 	printf("1.Dim\n");
 	printf("2.Brighten\n");
 	printf("Choose input; \n");
@@ -160,26 +167,26 @@ void brightAndDim(){
 	if(input == 1){
 	for(int i = 0; i < rows; i++){
 		for(int j = 0; j < columns; j++){
-		imageConvert +1;
+			printf("%c" , imageConvert[image[i][j]+1]);
 		}
-			}
+	}
 				}
 	if(input == 2){
 	for(int i = 0; i < rows; i++){
 		for(int j = 0; j < columns; j++){
-		imageConvert -1;
+			printf("%c" , imageConvert[image[i][j]-1]);
 		}
-			}
+	}
 				}
 	else{
 	printf("Input invalid");
 	}
 }
-void crop(int* rows, int* columns, int image[][MAX_2D_COLUMNS]){
+void crop(int rows, int columns, int image[][columns]){
 int newrows, newcolumns;
-void actualSize(int* rows, int* columns, int image[][MAX_2D_COLUMNS], FILE* fp);
-	printf("image size; row 1-%lf, columns 1-%lf" rows, columns);
-	printf("Enter your parameters; (from row 1-%lf, columns 1-%lf)" rows, columns);
+ 	
+	printf("image size; row 1-%lf, columns 1-%lf" ,rows, columns);
+	printf("Enter your parameters; (from row 1-%lf, columns 1-%lf)" ,rows, columns);
 	scanf("%d,%d", &newrows, &newcolumns);
 	for(int i = 0; i < newrows; i++){
 		for(int j = 0; j < newcolumns; j++){
