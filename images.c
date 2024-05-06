@@ -13,9 +13,15 @@
 #define MAXNAME 20
 
 void loadIn(int rows, int columns, int image[][columns], FILE* fp);//Glen
+<<<<<<< HEAD
 void renderOut(int rows, int columns, int image[][columns],char imageConvert[SIZE]);//Glen
 void brightAndDim(int rows, int columns, int image[][columns],char imageConvert[SIZE]);//Jaidunn
 void Crop(int rows, int columns, int image[][columns]);//Jaidunn
+=======
+void renderOut(int rows, int columns, int image[][columns], FILE* fp);//Glen
+void brightAndDim(int rows, int columns, int image[][columns]);//Jaidunn
+void crop(int rows, int columns, int image[][columns]);//Jaidunn
+>>>>>>> da1c3f8bffd06d6d8a7ca9f8657dfb4fd1612095
 int editMenu();//Jaidunn
 void actualSize(int* rows, int* columns, FILE* fp);//Glen
 void rotate90Deg();//Jaidunn and Glen
@@ -66,7 +72,7 @@ int main(){
 		case 3:
 			switch(editMenu()){
 			case 1:
-				printf("Does nothing right now");
+				crop(rows, columns, image);
 			break;
 			case 2:
 				brightAndDim(rows, columns, image,imageConvert);
@@ -75,10 +81,10 @@ int main(){
 				printf("Does nothing right now");
 			break;
 			}
-			printf("Would you like to save the edited image to the file? y - yes, n - no\n");
+			printf("Would you like to save the edited image to the file?\n y - yes, n - no\n");
 			printf("Enter your choice \n");
 			scanf(" %c", &choice);
-			if(choice == y){
+			if(choice == 'y'){
 			printf("What is the name of the file you would like to save the image to?\n");
 			scanf("%s", filename);
 			fpedit = fopen(filename, "w");
@@ -89,15 +95,12 @@ int main(){
 			printf("successfully grabbed image!\n");
 			saveimage(rows, columns, image, fpedit);
 			}
-			if(choice == n){
-			printf("okay");
-			}
-			else{
-			printf("Input invalid");
+			if(choice == 'n'){
+			printf("okay\n");
 			}
 			break;
 		case 4:
-			printf("Goodby!\n");
+			printf("Goodbye!\n");
 			break;
 		default:
 			printf("Invalid Option\n");
@@ -181,14 +184,14 @@ void brightAndDim(int rows, int columns, int image[][columns],char imageConvert[
 	printf("2.Brighten\n");
 	printf("Choose input; \n");
 	scanf("%d", &input);
-	if(input == 1){
+	if(input = '1'){
 	for(int i = 0; i < rows; i++){
 		for(int j = 0; j < columns; j++){
 			printf("%c" , imageConvert[image[i][j]+1]);
 		}
 	}
 				}
-	if(input == 2){
+	if(input = '2'){
 	for(int i = 0; i < rows; i++){
 		for(int j = 0; j < columns; j++){
 			printf("%c" , imageConvert[image[i][j]-1]);
@@ -200,16 +203,18 @@ void brightAndDim(int rows, int columns, int image[][columns],char imageConvert[
 	}
 }
 void crop(int rows, int columns, int image[][columns]){
-int newrows, newcolumns;
+int newrows, newcolumns, i, j;
  	
-	printf("image size; row 1-%lf, columns 1-%lf" ,rows, columns);
-	printf("Enter your parameters; (from row 1-%lf, columns 1-%lf)" ,rows, columns);
-	scanf("%d,%d", &newrows, &newcolumns);
-	for(int i = 0; i < newrows; i++){
-		for(int j = 0; j < newcolumns; j++){
+	printf("image size; row 1-%d, columns 1-%d\n" ,rows, columns);
+	printf("Enter choice row: \n");
+	scanf("%d", &newrows);
+	printf("enter choice columns: \n");
+	scanf("%d", &newcolumns);
+	for(i = 0; i < newrows; i++){
+		for(j = 0; j < newcolumns; j++){
 		}
 			}
-	printf(" ");
+	printf("%c", image[i][j]);
 }
 
 void saveimage(int rows, int columns, int image[][columns], FILE* fpe){
