@@ -7,30 +7,24 @@
 
 #define MAX_2D_ROWS 500
 #define MAX_2D_COLUMNS 500
-#define SIZE 5
+#define SIZE 6
 #define TEST_IN "test_image.txt"//these will be taken out when closer to done
 #define TEST_OUT "test_image_out.txt"
 #define MAXNAME 20
 
-void loadIn(int rows, int columns, int image[][columns], FILE* fp);//Glen
-<<<<<<< HEAD
+void loadIn(int rows, int columns, int image[][columns],char temp[][MAX_2D_COLUMNS]);//Glen
 void renderOut(int rows, int columns, int image[][columns],char imageConvert[SIZE]);//Glen
 void brightAndDim(int rows, int columns, int image[][columns],char imageConvert[SIZE]);//Jaidunn
 void Crop(int rows, int columns, int image[][columns]);//Jaidunn
-=======
-void renderOut(int rows, int columns, int image[][columns], FILE* fp);//Glen
-void brightAndDim(int rows, int columns, int image[][columns]);//Jaidunn
-void crop(int rows, int columns, int image[][columns]);//Jaidunn
->>>>>>> da1c3f8bffd06d6d8a7ca9f8657dfb4fd1612095
 int editMenu();//Jaidunn
-void actualSize(int* rows, int* columns, FILE* fp);//Glen
+void actualSize(int* rows, int* columns,char temp[][MAX_2D_COLUMNS], FILE* fp);//Glen
 void rotate90Deg();//Jaidunn and Glen
 void saveimage(int rows, int columns, int image[][columns], FILE* fpe);
 
 int main(){
 	int image[MAX_2D_ROWS][MAX_2D_COLUMNS], rows, columns;
 	int userChoice;
-	char choice, filename[MAXNAME], writefilepointer, y, n, imageConvert[SIZE];
+	char choice, filename[MAXNAME], writefilepointer, y, n, imageConvert[SIZE],tempCharArray[MAX_2D_ROWS][MAX_2D_COLUMNS];
 	FILE* fpIn,* fpOut;
 	FILE* fpedit;
 	
@@ -39,6 +33,8 @@ int main(){
 	imageConvert[2] = 'o';
 	imageConvert[3] = 'O';
 	imageConvert[4] = '0';
+	imageConvert[5] = '\n';
+	
 	
 	do{
 	printf("**ERINSTAGRAM**\n");
@@ -53,12 +49,12 @@ int main(){
 		case 1:
 			fpIn = fopen(TEST_IN,"r");
 			if(fpIn == NULL){
-				printf("Could not open file to read");
+				printf("Could not open file to read\n");
 				break;
 			}
 			
-			actualSize(&rows, &columns, fpIn);
-			loadIn(rows, columns, image, fpIn);
+			actualSize(&rows, &columns,tempCharArray,fpIn);
+			loadIn(rows, columns, image,tempCharArray);
 			printf("successfully loaded file\n");
 			break;
 		case 2:
@@ -72,7 +68,7 @@ int main(){
 		case 3:
 			switch(editMenu()){
 			case 1:
-				crop(rows, columns, image);
+				Crop(rows, columns, image);
 			break;
 			case 2:
 				brightAndDim(rows, columns, image,imageConvert);
@@ -94,7 +90,6 @@ int main(){
 				}
 			saveimage(rows,columns, image, fpedit);
 			printf("successfully grabbed image!\n");
-			saveimage(rows, columns, image, fpedit);
 			}
 			if(choice == 'n'){
 			printf("okay\n");
@@ -112,12 +107,29 @@ int main(){
 	return 0;
 }
 
-void loadIn(int rows, int columns, int image[][columns], FILE* fp){
-	char temp[rows][columns];
+void loadIn(int rows, int columns, int image[][columns],char temp[][MAX_2D_COLUMNS]){
 	for(int i = 0; i < rows; i++){
 		for(int j = 0; j < columns; j++){
-			fscanf(fp, "%d" , &image[i][j]);
-			image[i][j+1] = '\n';
+			switch(temp[i][j]){
+				case '0':
+					image[i][j] = 0;
+					break;
+				case '1':
+					image[i][j] = 1;
+					break;
+				case '2':
+					image[i][j] = 2;
+					break;
+				case '3':
+					image[i][j] = 3;
+					break;
+				case '4':
+					image[i][j] = 4;
+					break;
+				case '\n':
+					image[i][j] = 5;//newline is 5 for the image array
+					break;
+			}
 		}
 	}
 }
@@ -140,20 +152,19 @@ void renderOut(int rows, int columns, int image[][columns],char imageConvert[SIZ
 				case 4:
 					printf("%c" , imageConvert[4]);
 					break;
-				case '\n':
+				case 5:
 					printf("\n");
 					break;
 			}
 		}
 	}
 }
-void actualSize(int* rows, int* columns, FILE* fp){
-	char temp[MAX_2D_ROWS][MAX_2D_COLUMNS];
+void actualSize(int* rows, int* columns,char temp[][MAX_2D_COLUMNS], FILE* fp){
 	*rows = 0;
 	*columns = 0;
 	*rows+=1;
 	for(int i = 0; i < MAX_2D_ROWS; i++){
-		for(int j = 0; j < MAX_2D_COLUMNS; j++){
+		for(int j = 0; j <= MAX_2D_COLUMNS; j++){
 			if(fscanf(fp, "%c" , &temp[i][j]) == 1){
 				if(temp[i][j] == '\n'){
 					*rows+=1;
@@ -162,6 +173,7 @@ void actualSize(int* rows, int* columns, FILE* fp){
 				else if((temp[i][j] == '0')||(temp[i][j] == '1')||(temp[i][j] == '2')||(temp[i][j] == '3')||(temp[i][j] == '4')){
 					*columns+=1;
 				}
+				temp[i][j + 1] = '\n';
 			}
 		}
 	}
@@ -183,19 +195,27 @@ void brightAndDim(int rows, int columns, int image[][columns],char imageConvert[
 	int input;
 	printf("1.Dim\n");
 	printf("2.Brighten\n");
-	printf("Choose input; \n");
+	printf("Choose input: \n");
 	scanf("%d", &input);
 	if(input = '1'){
 	for(int i = 0; i < rows; i++){
 		for(int j = 0; j < columns; j++){
-			printf("%c" , imageConvert[image[i][j]+1]);
+			image[i][j] = image[i][j] + 1;
+			if(image[i][j] > 4){
+				image[i][j] = 4;
+			}
+			renderOut(rows, columns, image, imageConvert);
 		}
 	}
 				}
 	if(input = '2'){
 	for(int i = 0; i < rows; i++){
 		for(int j = 0; j < columns; j++){
-			printf("%c" , imageConvert[image[i][j]-1]);
+			image[i][j] = image[i][j] - 1;
+			if(image[i][j] < 0){
+				image[i][j] = 0;
+			}
+			renderOut(rows, columns, image, imageConvert);
 		}
 	}
 				}
@@ -203,7 +223,7 @@ void brightAndDim(int rows, int columns, int image[][columns],char imageConvert[
 	printf("Input invalid");
 	}
 }
-void crop(int rows, int columns, int image[][columns]){
+void Crop(int rows, int columns, int image[][columns]){
 int newrows, newcolumns, i, j;
  	
 	printf("image size; row 1-%d, columns 1-%d\n" ,rows, columns);
@@ -221,7 +241,7 @@ int newrows, newcolumns, i, j;
 void saveimage(int rows, int columns, int image[][columns], FILE* fpe){
 	for(int i = 0; i < rows; i++){
 		for(int j = 0; j < columns; j++){
-			fscanf(fpe, "%d" , &image[i][j]);
+			fprintf(fpe, "%d" , &image[i][j]);
 		}
 	}
 }
