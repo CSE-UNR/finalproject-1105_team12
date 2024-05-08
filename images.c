@@ -13,15 +13,9 @@
 #define MAXNAME 20
 
 void loadIn(int rows, int columns, int image[][columns], FILE* fp);//Glen
-<<<<<<< HEAD
 void renderOut(int rows, int columns, int image[][columns],char imageConvert[SIZE]);//Glen
 void brightAndDim(int rows, int columns, int image[][columns],char imageConvert[SIZE]);//Jaidunn
-void Crop(int rows, int columns, int image[][columns]);//Jaidunn
-=======
-void renderOut(int rows, int columns, int image[][columns], FILE* fp);//Glen
-void brightAndDim(int rows, int columns, int image[][columns]);//Jaidunn
 void crop(int rows, int columns, int image[][columns]);//Jaidunn
->>>>>>> da1c3f8bffd06d6d8a7ca9f8657dfb4fd1612095
 int editMenu();//Jaidunn
 void actualSize(int* rows, int* columns, FILE* fp);//Glen
 void rotate90Deg();//Jaidunn and Glen
@@ -78,7 +72,7 @@ int main(){
 				brightAndDim(rows, columns, image,imageConvert);
 			break;
 			case 3:
-				printf("Does nothing right now");
+				printf("Does nothing right now\n");
 			break;
 			}
 			printf("Would you like to save the edited image to the file?\n y - yes, n - no\n");
@@ -205,11 +199,10 @@ void brightAndDim(int rows, int columns, int image[][columns],char imageConvert[
 }
 void crop(int rows, int columns, int image[][columns]){
 int newrows, newcolumns, i, j;
- 	
 	printf("image size; row 1-%d, columns 1-%d\n" ,rows, columns);
-	printf("Enter choice row: \n");
+	printf("Enter row choice: \n");
 	scanf("%d", &newrows);
-	printf("enter choice columns: \n");
+	printf("enter columns choice: \n");
 	scanf("%d", &newcolumns);
 	for(i = 0; i < newrows; i++){
 		for(j = 0; j < newcolumns; j++){
