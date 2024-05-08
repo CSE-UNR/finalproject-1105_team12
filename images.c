@@ -13,7 +13,6 @@
 #define MAXNAME 20
 
 
-void loadIn(int rows, int columns, int image[][columns], FILE* fp);//Glen
 void renderOut(int rows, int columns, int image[][columns],char imageConvert[SIZE]);//Glen
 void brightAndDim(int rows, int columns, int image[][columns],char imageConvert[SIZE]);//Jaidunn
 void crop(int rows, int columns, int image[][columns]);//Jaidunn
@@ -70,7 +69,7 @@ int main(){
 		case 3:
 			switch(editMenu()){
 			case 1:
-				Crop(rows, columns, image);
+				crop(rows, columns, image);
 			break;
 			case 2:
 				brightAndDim(rows, columns, image,imageConvert);
@@ -225,7 +224,7 @@ void brightAndDim(int rows, int columns, int image[][columns],char imageConvert[
 	printf("Input invalid");
 	}
 }
-void Crop(int rows, int columns, int image[][columns]){
+void crop(int rows, int columns, int image[][columns]){
 int newrows, newcolumns, i, j;
 	printf("image size; row 1-%d, columns 1-%d\n" ,rows, columns);
 	printf("Enter row choice: \n");
@@ -242,7 +241,7 @@ int newrows, newcolumns, i, j;
 void saveimage(int rows, int columns, int image[][columns], FILE* fpe){
 	for(int i = 0; i < rows; i++){
 		for(int j = 0; j < columns; j++){
-			fprintf(fpe, "%d" , &image[i][j]);
+			fprintf(fpe, "%ls" , &image[i][j]);
 		}
 	}
 }
